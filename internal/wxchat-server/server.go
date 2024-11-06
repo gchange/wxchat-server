@@ -1,6 +1,7 @@
 package wxchatserver
 
 import (
+	"fmt"
 	"sync"
 	"wx-server/internal/httpserver"
 	"wx-server/internal/httpserver/middleware"
@@ -29,6 +30,7 @@ func NewServer(config *Config) (server *Server, err error) {
 	}
 
 	for name, c := range config.AI {
+		fmt.Printf("%s:%+v\n", name, c)
 		ai, err := NewAI(&c)
 		if err != nil {
 			return nil, err

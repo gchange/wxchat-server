@@ -1,6 +1,6 @@
 package weixin
 
 type Config struct {
-	AppId  string `json:"app_id" yaml:"app_id"`
-	Secret string `json:"secret" yaml:"secret"`
+	AppId  string `json:"app-id" yaml:"app-id" mapstructure:"app-id"`
+	Secret string `json:"secret" yaml:"secret" mapstructure:"secret"`
 }
