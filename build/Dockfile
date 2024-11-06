@@ -3,7 +3,6 @@ FROM golang:1.23.2-bullseye AS build
 ADD . /go/src/wxchat-server
 WORKDIR /go/src/
 RUN cd /go/src/wxchat-server && \
-    go mod tidy && \
     go build -o /app/bin/wxchat-server
 
 FROM golang:1.23.2-bullseye
