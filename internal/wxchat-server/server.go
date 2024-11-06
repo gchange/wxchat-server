@@ -1,7 +1,7 @@
 package wxchatserver
 
 import (
-	"wx-server/internal/ai"
+	"sync"
 	"wx-server/internal/httpserver"
 	"wx-server/internal/httpserver/middleware"
 	"wx-server/internal/weixin"
@@ -11,7 +11,7 @@ type Server struct {
 	config Config
 	server *httpserver.HttpServer
 	wx     *weixin.Client
-	qwen   ai.AI
+	ai     sync.Map
 }
 
 func NewServer(config *Config) (server *Server, err error) {
@@ -21,15 +21,19 @@ func NewServer(config *Config) (server *Server, err error) {
 	if err != nil {
 		return nil, err
 	}
-	qwen, err := ai.NewQwen(&config.Qwen)
-	if err != nil {
-		return nil, err
-	}
 	server = &Server{
 		config: *config,
 		server: s,
 		wx:     wx,
-		qwen:   qwen,
+		ai:     sync.Map{},
+	}
+
+	for name, c := range config.AI {
+		ai, err := NewAI(&c)
+		if err != nil {
+			return nil, err
+		}
+		server.ai.Store(name, ai)
 	}
 
 	rg := s.RootRouterGroup()
@@ -42,7 +46,7 @@ func NewServer(config *Config) (server *Server, err error) {
 	unauth.POST("login", server.login)
 
 	auth := rg.Group("/")
-	auth.GET("wschat", server.wschat)
+	//auth.GET("wschat", server.wschat)
 	auth.POST("chat", server.chat)
 	return
 }
