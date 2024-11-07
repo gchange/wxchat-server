@@ -13,7 +13,7 @@ type AIConfig struct {
 
 type Config struct {
 	Server    httpserver.Config   `json:"server" yaml:"server" mapstructure:"server"`
-	SecretKey []byte              `json:"secret-key" yaml:"secret-key" mapstructure:"secret-key"`
+	SecretKey string              `json:"secret-key" yaml:"secret-key" mapstructure:"secret-key"`
 	WeiXin    weixin.Config       `json:"weixin" yaml:"weixin" mapstructure:"weixin"`
 	AI        map[string]AIConfig `json:"ai" yaml:"ai" mapstructure:"ai"`
 }
